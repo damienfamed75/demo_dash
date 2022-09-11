@@ -8,7 +8,7 @@ public partial class DemoDashGame
 	public RealTimeUntil StateTimer { get; set; } = 0f;
 
 	[Net]
-	public GameStates GameState { get; set; } = GameStates.Warmup;
+	public GameStates GameState { get; set; } = GameStates.Live;
 
     [Net]
 	public string NextMap { get; set; } = "";

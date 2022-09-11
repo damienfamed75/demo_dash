@@ -51,7 +51,7 @@ public partial class DemoDashGame : Sandbox.Game
 		// Create a pawn for this client to play with
 		// var pawn = new Pawn();
 		// client.Pawn = pawn;
-		var pawn = new player.DemoDashPlayer();
+		var pawn = new DemoDashPlayer(client);
 		pawn.Respawn();
 		client.Pawn = pawn;
 		// FirstPersonCamera

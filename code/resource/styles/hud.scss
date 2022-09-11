@@ -1,8 +1,26 @@
 @import "_crosshair.scss";
+@import "_inventory.scss";
 
 RootHud
 {
     background-color: rgba(#333, 0.5);
     transition: background-color 0.2s ease-in;
     transform-origin: 50% 50%;
+}
+
+.dd_pistol .icon
+{
+    background-image: url("/ui/weapons/dd_pistol.png");
+}
+
+.dd_shotgun .icon
+{
+    background-image: url("/ui/weapons/dd_shotgun.png");
+}
+
+.inventory
+{
+    background-color: rgba(#ffc20a, .05);
+    padding: 16px;
+    color: #ffff0a;
 }

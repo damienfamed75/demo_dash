@@ -1,0 +1,121 @@
+inventorybar
+{
+    position: absolute;
+    left: 200px;
+    top: 80px;
+    opacity: 0;
+    transition: all 0.2s ease-out;
+    mix-blend-mode: lighten;
+    font-family: Arial, Helvetica, sans-serif;
+
+    &.active
+    {
+        top: 100px;
+        transition: all 0.1s ease-out;
+        opacity: 1;
+    }
+}
+
+inventorycolumn
+{
+    margin-right: 5px;
+    color: #f1b430;
+    flex-direction: column;
+    align-items: flex-start; // align left
+
+    .slot-number
+    {
+        background-color: #704603;
+        padding: 15px 15px 0px 10px;
+        font-size: 20px;
+        font-weight: bolder;
+        width: 40px;
+        height: 40px;
+    }
+
+    inventoryicon
+    {
+        opacity: 1;
+        padding: 25px 15px 10px 2px;
+        width: 40px;
+        height: 40px;
+        overflow: hidden;
+        transition: all 0.1s ease-out;
+
+        .icon
+        {
+            opacity: 0;
+        }
+    }
+
+    opacity: 0.4;
+
+    &.active
+    {
+        opacity: 1;
+        inventoryicon
+        {
+            transition: all 0.1s ease-out;
+            opacity: 0.2;
+            display: flex;
+            width: 200px;
+            height: 90px;
+
+            .icon
+            {
+                opacity: 1;
+            }
+
+            &.active
+            {
+                opacity: 1;
+            }
+        }
+    }
+}
+
+inventoryicon
+{
+    margin-top: 5px;
+    mix-blend-mode: lighten;
+    color: #f1b430;
+    background-color: #704603;
+    font-size: 40px;
+    font-weight: lighter;
+    padding: 10px;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 1px solid rgba(#f1b430, 0.5);
+
+    .icon
+    {
+        width: 150px;
+        height: 150px;
+        background-size: 100%;
+        background-image-tint: #ffc70e;
+        position: absolute;
+    }
+
+    &.active
+    {
+        opacity: 1;
+
+        .icon
+        {
+            opacity: 1;
+        }
+    }
+
+    &.empty
+    {
+        opacity: 0.5;
+        background-color: #a42812;
+        color: #641305;
+
+        .icon
+        {
+            background-color: #adec00;
+        }
+    }
+}
