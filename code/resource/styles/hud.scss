@@ -1,0 +1,8 @@
+@import "_crosshair.scss";
+
+RootHud
+{
+    background-color: rgba(#333, 0.5);
+    transition: background-color 0.2s ease-in;
+    transform-origin: 50% 50%;
+}

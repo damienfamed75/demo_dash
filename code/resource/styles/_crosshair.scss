@@ -1,0 +1,16 @@
+crosshair
+{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    z-index: -1;
+    width: 5px;
+    height: 5px;
+    mix-blend-mode: lighten;
+    background-color: #eee;
+    border-radius: 100px;
+    align-items: flex-end;
+    opacity: 0.5;
+
+    transform: translate(-50%, -50%);
+}
