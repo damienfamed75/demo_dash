@@ -1,12 +1,15 @@
-Health
+health
 {
     position: absolute;
-    left: 100px;
-    bottom: 50px;
+    transform-origin: center;
+    // left: 0px;
+    // bottom: 20px;
     font-size: 36px;
     font-weight: bold;
     font-family: Arial, Helvetica, sans-serif;
     align-items: center;
+    flex-direction: row-reverse;
+    justify-content: center;
 
     height: 80px;
     padding: 0 15px;
@@ -15,23 +18,23 @@ Health
     background-color: rgba(#704603, 1);
     mix-blend-mode: lighten;
     border: 1px solid rgba(#f1b430, 0.5);
-}
 
-.health-bar-grey
-{
-    // bottom: -20%;
-    height: 40px;
-    border-top-right-radius: 3px;
-    border-bottom-right-radius: 3px;
-    transition: all 0.1s ease-in;
-    background-color: #111;
-}
+    .health-bar-grey
+    {
+        // bottom: -20%;
+        height: 40px;
+        border-top-right-radius: 3px;
+        border-bottom-right-radius: 3px;
+        transition: all 0.1s ease-in;
+        background-color: #111;
+    }
 
-.health-bar
-{
-    // bottom: -20%;
-    height: 40px;
-    border-top-left-radius: 3px;
-    border-bottom-left-radius: 3px;
-    transition: all 0.1s ease-in;
+    .health-bar
+    {
+        // bottom: -20%;
+        height: 40px;
+        border-top-left-radius: 3px;
+        border-bottom-left-radius: 3px;
+        transition: all 0.1s ease-in;
+    }
 }

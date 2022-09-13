@@ -173,7 +173,19 @@ public partial class DemoDashPlayer : Player
 
 		lastDamage = info;
 
-		Log.Info( info );
+		if (info.Attacker is DemoDashPlayer attacker) {
+			if (Health <= 0) {
+				info.Attacker.Client.AddInt( "kills" );
+				if (attacker.IsDashing || attacker.IsSliding || attacker.IsWallSliding) {
+					var score = 100;
+					// Multiply score based on what the attacker is doing
+					score = (int)(score * (attacker.IsDashing && !attacker.IsSliding ? 2f : 1.5f));
+					score = (int)(score * (attacker.IsWallSliding ? 2f : 1.5f));
+					// Add the score to the client
+					info.Attacker.Client.AddInt( "style", score );
+				}
+			}
+		}
 
 		// TookDamage( lastDamage.Flags, lastDamage.Position, lastDamage.Force );
 

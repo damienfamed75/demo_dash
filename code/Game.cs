@@ -94,4 +94,10 @@ public partial class DemoDashGame : Sandbox.Game
 			// localPawn.Render
 		}
 	}
+
+	[ClientRpc]
+	public override void OnKilledMessage( long leftid, string left, long rightid, string right, string method )
+	{
+		Sandbox.UI.KillFeed.Current?.AddEntry( leftid, left, rightid, right, method );
+	}
 }

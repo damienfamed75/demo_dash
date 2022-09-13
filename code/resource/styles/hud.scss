@@ -2,11 +2,18 @@
 @import "_inventory.scss";
 @import "_ammo.scss";
 @import "_health.scss";
+@import "_killfeed.scss";
 
 RootHud
 {
+    background-color: rgba(#333, 0);
     transition: background-color 0.2s ease-in;
     transform-origin: 50% 50%;
+
+    &.devcamera
+    {
+        display: none;
+    }
 }
 
 .dd_pistol .icon
@@ -29,4 +36,26 @@ RootHud
     background-color: rgba(#ffc20a, .05);
     padding: 16px;
     color: #ffff0a;
+}
+
+.bottom-left
+{
+    left: 70px;
+}
+
+.bottom-right
+{
+    right: 200px;
+}
+
+.bottom-left, .bottom-right
+{
+    mix-blend-mode: lighten;
+    position: absolute;
+    bottom: 100px;
+}
+
+iconpanel
+{
+    font-family: "Material Icons";
 }
