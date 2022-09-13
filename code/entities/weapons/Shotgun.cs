@@ -58,23 +58,23 @@ partial class Shotgun : DemoDashWeapon
 		ShootBullets( 4, 0.2f, 0.3f, 20.0f, 2.0f );
 	}
 
-    public override void AttackSecondary()
-    {
-		TimeSincePrimaryAttack = -0.5f;
-		TimeSinceSecondaryAttack = -0.5f;
+    // public override void AttackSecondary()
+    // {
+	// 	TimeSincePrimaryAttack = -0.5f;
+	// 	TimeSinceSecondaryAttack = -0.5f;
 
-        if (!TakeAmmo(2)) {
-			DryFire();
-			return;
-		}
+    //     if (!TakeAmmo(2)) {
+	// 		DryFire();
+	// 		return;
+	// 	}
 
-		(Owner as AnimatedEntity).SetAnimParameter( "b_attack", true );
+	// 	(Owner as AnimatedEntity).SetAnimParameter( "b_attack", true );
 
-        DoubleShootEffects();
-		PlaySound( "rust_pumpshotgun.shootdouble" );
+    //     DoubleShootEffects();
+	// 	PlaySound( "rust_pumpshotgun.shootdouble" );
 
-		ShootBullet( 8, 0.3f, 20.0f, 2.0f );
-	}
+	// 	ShootBullet( 8, 0.3f, 20.0f, 2.0f );
+	// }
 
     [ClientRpc]
 	protected override void ShootEffects()
