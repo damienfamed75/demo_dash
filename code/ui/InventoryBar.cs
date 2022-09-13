@@ -116,7 +116,7 @@ public class InventoryBar : Panel
 
 		if ( oldSelected != SelectedWeapon )
 		{
-			Sound.FromScreen( "ui.navigate.forward" );
+			Sound.FromScreen( "ui.navigate.deny" );
 		}
 	}
 

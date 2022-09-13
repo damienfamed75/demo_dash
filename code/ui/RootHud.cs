@@ -17,6 +17,8 @@ public class RootHud : RootPanel
 
 		AddChild<Crosshair>();
 		AddChild<InventoryBar>();
+		AddChild<Ammo>();
+		AddChild<Health>();
 	}
 
 	public override void Tick()
