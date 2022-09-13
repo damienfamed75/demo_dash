@@ -3,7 +3,7 @@ using DemoDash.player;
 
 namespace DemoDash.entities.weapons;
 
-partial class DemoDashWeapon : BaseWeapon
+partial class DemoDashWeapon : BaseWeapon, IUse
 {
     public virtual AmmoType AmmoType => AmmoType.Pistol;
 	public virtual int ClipSize => 16;
@@ -15,7 +15,7 @@ partial class DemoDashWeapon : BaseWeapon
 
     [Net, Predicted]
     public int AmmoClip { get; set; }
-    
+
     [Net, Predicted]
     public TimeSince TimeSinceReload { get; set; }
 
@@ -27,34 +27,27 @@ partial class DemoDashWeapon : BaseWeapon
 
     public PickupTrigger PickupTrigger { get; protected set; }
 
-    public int AvailableAmmo()
-    {
-		var owner = Owner as DemoDashPlayer;
-        if (owner == null)
-            return 0;
-
-		return owner.AmmoCount( AmmoType );
-	}
-
-	public override void ActiveStart( Entity ent )
-	{
-		base.ActiveStart( ent );
-		TimeSinceDeployed = 0;
-		IsReloading = false;
-	}
-
 	public override string ViewModelPath => "weapons/rust_pistol/v_rust_pistol.vmdl";
 
+	/// <summary>
+	/// Spawn is called when this weapon is spawned in the world.
+	/// 
+	/// Set a default model to this weapon and create a pickup trigger.
+	/// </summary>
     public override void Spawn()
     {
 		base.Spawn();
-
+		// Set the base model to be the rust pistol.
 		SetModel( "weapons/rust_pistol/rust_pistol.vmdl" );
-
+		// Create a pickup trigger so a player can use this.
 		PickupTrigger = new PickupTrigger {
 			Parent = this,
 			Position = Position,
+			EnableSelfCollisions = false,
+			EnableTouch = true,
 		};
+		// Set the physics body to never sleep.
+		PickupTrigger.PhysicsBody.AutoSleep = false;
 	}
 
 	public override void Reload()
@@ -134,6 +127,17 @@ partial class DemoDashWeapon : BaseWeapon
 	}
 
 	/// <summary>
+	/// AvailableAmmo returns the amount of total ammunition for this weapon's ammo type.
+	/// </summary>
+    public int AvailableAmmo()
+    {
+		if ( Owner is not DemoDashPlayer owner )
+			return 0;
+
+		return owner.AmmoCount( AmmoType );
+	}
+
+	/// <summary>
 	/// Remove deletes this entity.
 	/// </summary>
 	public void Remove()
@@ -160,50 +164,6 @@ partial class DemoDashWeapon : BaseWeapon
 
 		AmmoClip -= amount;
 		return true;
-	}
-
-    public bool IsUsable()
-    {
-        if (AmmoClip > 0)
-			return true;
-
-        if (AmmoType == AmmoType.None)
-			return true;
-
-		return AvailableAmmo() > 0;
-	}
-
-	public override void OnCarryStart( Entity carrier )
-	{
-		base.OnCarryStart( carrier );
-
-        if (PickupTrigger.IsValid()) {
-			PickupTrigger.EnableTouch = false;
-		}
-	}
-
-	public override void OnCarryDrop( Entity dropper )
-	{
-		base.OnCarryDrop( dropper );
-
-        if (PickupTrigger.IsValid()) {
-			PickupTrigger.EnableTouch = true;
-		}
-	}
-
-	public override void CreateViewModel()
-	{
-		Host.AssertClient();
-
-        if (string.IsNullOrEmpty(ViewModelPath))
-			return;
-
-		ViewModelEntity = new ViewModel();
-		ViewModelEntity.Position = Position;
-		ViewModelEntity.Owner = Owner;
-		ViewModelEntity.EnableViewmodelRendering = true;
-		ViewModelEntity.SetModel( ViewModelPath );
-		ViewModelEntity.SetAnimParameter( "deploy", true );
 	}
 
     public void DryFire()
