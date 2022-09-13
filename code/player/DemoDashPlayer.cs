@@ -55,13 +55,16 @@ public partial class DemoDashPlayer : Player
 		Inventory.Add( new Pistol() );
 		Inventory.Add( new SMG() );
 
-		GiveAmmo( AmmoType.Shotgun, 15 );
+		GiveAmmo( AmmoType.Shotgun, 99 );
+		GiveAmmo( AmmoType.Pistol, 160 );
 
 		Animator = new StandardPlayerAnimator();
 		CameraMode = new FirstPersonCamera();
 
 		Tags.Add( "player" );
 		Health = 100;
+
+		EndDash();
 
 		base.Respawn();
 	}
@@ -164,32 +167,39 @@ public partial class DemoDashPlayer : Player
 
 	public override void TakeDamage( DamageInfo info )
 	{
+		base.TakeDamage( info );
+
 		TimeSinceDamage = 0;
+		bool wasHeadshot = false;
+
 		// If the player was hit in the head (which is HitboxGroup 1)
 		// then double the damage.
 		if (GetHitboxGroup(info.HitboxIndex) == 1) {
 			info.Damage *= 2.0f; // Crit hit
+			wasHeadshot = true;
 		}
 
 		lastDamage = info;
 
 		if (info.Attacker is DemoDashPlayer attacker) {
 			if (Health <= 0) {
-				info.Attacker.Client.AddInt( "kills" );
-				if (attacker.IsDashing || attacker.IsSliding || attacker.IsWallSliding) {
-					var score = 100;
-					// Multiply score based on what the attacker is doing
-					score = (int)(score * (attacker.IsDashing && !attacker.IsSliding ? 2f : 1.5f));
-					score = (int)(score * (attacker.IsWallSliding ? 2f : 1.5f));
-					// Add the score to the client
-					info.Attacker.Client.AddInt( "style", score );
-				}
+				var score = 100;
+
+				score = (int)(score * (attacker.GroundEntity == null ? 1.5f : 1.0f));
+				score = (int)(score * (attacker.IsDashing && !attacker.IsSliding ? 2f : 1.0f));
+				score = (int)(score * (attacker.IsSliding ? 1.5f : 1.0f));
+				score = (int)(score * (attacker.IsWallSliding ? 3f : 1.0f));
+
+				if (wasHeadshot)
+					score *= 2;
+
+				Log.Info( $"add [{score}] to [{info.Attacker.Name}]" );
+				// attacker.Client.AddInt( "score", score );
+				info.Attacker.Client.AddInt( "score", score );
 			}
 		}
 
 		// TookDamage( lastDamage.Flags, lastDamage.Position, lastDamage.Force );
-
-		base.TakeDamage( info );
 	}
 
 	public override void StartTouch(Entity other)

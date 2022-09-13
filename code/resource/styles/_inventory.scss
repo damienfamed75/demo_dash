@@ -1,7 +1,7 @@
 inventorybar
 {
     position: absolute;
-    left: 200px;
+    left: 50px;
     top: 80px;
     opacity: 0;
     transition: all 0.2s ease-out;
@@ -31,6 +31,7 @@ inventorycolumn
         font-weight: bolder;
         width: 40px;
         height: 40px;
+        border-radius: 3px;
     }
 
     inventoryicon
@@ -86,6 +87,7 @@ inventoryicon
     align-items: center;
     justify-content: center;
     overflow: hidden;
+    border-radius: 3px;
     border: 1px solid rgba(#f1b430, 0.5);
 
     .icon

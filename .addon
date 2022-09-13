@@ -9,7 +9,8 @@
   "ResourcePaths": [
     "/resource/*",
     "/resource/styles/*",
-    "resource/templates/*"
+    "resource/templates/*",
+    "/particles/*"
   ],
   "HasCode": true,
   "CodePath": "/code/",

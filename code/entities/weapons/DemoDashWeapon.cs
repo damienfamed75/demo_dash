@@ -148,8 +148,15 @@ partial class DemoDashWeapon : BaseWeapon, IUse
     [ClientRpc]
     public void CreateTracerEffect(Vector3 hitPosition)
     {
+		// Get the muzzle position on our effect entity (either the viewmodel or world model)
+		var pos = EffectEntity.GetAttachment( "muzzle" ) ?? Transform;
 
-    }
+		var pSys = Particles.Create( "particles/tracer.standard.vpcf" );
+		if (pSys != null) {
+			pSys.SetPosition( 0, pos.Position );
+			pSys.SetPosition( 1, hitPosition );
+		}
+	}
 
 	/// <summary>
 	/// Try to take ammo from the weapon's clip.

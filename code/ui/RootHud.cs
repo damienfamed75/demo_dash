@@ -8,6 +8,8 @@ public class RootHud : RootPanel
 {
 	public static RootHud Current;
 
+	public Scoreboard Scoreboard { get; set; }
+
 	public RootHud()
     {
 		Current = this;
@@ -20,6 +22,7 @@ public class RootHud : RootPanel
 		// AddChild<Ammo>();
 		// AddChild<Health>();
 		AddChild<KillFeed>();
+		Scoreboard = AddChild<Scoreboard>();
 	}
 
 	public override void Tick()

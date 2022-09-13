@@ -3,6 +3,7 @@
 @import "_ammo.scss";
 @import "_health.scss";
 @import "_killfeed.scss";
+@import "_scoreboard.scss";
 
 RootHud
 {
@@ -58,4 +59,49 @@ RootHud
 iconpanel
 {
     font-family: "Material Icons";
+}
+
+.top-middle
+{
+    top: 10px;
+    width: 100%;
+    justify-content: center;
+}
+
+gamehud
+{
+    position: absolute;
+    background-color: rgba(#704603, 1);
+    padding: 16px;
+    margin: 5px;
+    font-size: 32px;
+    font-weight: bolder;
+    color: #f1b430;
+    text-shadow: #333;
+    text-align: center;
+    align-items: center;
+    font-family: Roboto;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 15px;
+    // width: 50%;
+    // height: 80px;
+    min-height: 7%;
+    height: 7%;
+    mix-blend-mode: lighten;
+    border-radius: 3px;
+    border: 1px solid rgba(#f1b430, 0.5);
+
+    .game-state
+    {
+        font-size: 12px;
+        font-weight: bolder;
+        text-transform: uppercase;
+        text-decoration: underline;
+    }
+
+    .game-timer
+    {
+        font-size: 32px;
+    }
 }

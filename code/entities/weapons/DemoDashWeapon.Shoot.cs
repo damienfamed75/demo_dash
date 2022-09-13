@@ -25,6 +25,9 @@ public partial class DemoDashWeapon
 		{
 			tr.Surface.DoBulletImpact( tr );
 
+			if (tr.Distance > 200)
+				CreateTracerEffect( tr.EndPosition );
+
 			if ( !tr.Entity.IsValid() || !IsServer )
 				continue;
 

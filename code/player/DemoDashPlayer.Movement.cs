@@ -48,14 +48,13 @@ public partial class DemoDashPlayer
 
 	public void StartDash()
 	{
-		IsDashing = true;
 		TimeSinceDash = 0;
 
-		// var jumpV = EyeRotation.Forward * 335; // 335 is lunge force.
-		Vector3 jumpV = default;
-		if (!Controller.WishVelocity.IsNearlyZero( 0.01f )) {
-			jumpV = Controller.WishVelocity;
-		}
+		Vector3 jumpV = Controller.WishVelocity;
+		if (jumpV.IsNearlyZero( 0.01f ))
+			return;
+
+		IsDashing = true;
 
 		if (jumpV == Vector3.Zero)
 			return;

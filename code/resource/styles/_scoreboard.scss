@@ -1,0 +1,74 @@
+.scoreboard
+{
+	position: absolute;
+	z-index: 100;
+	flex-direction: column;
+	font-family: Roboto;
+	font-size: 24px;
+	font-weight: light;
+	color: white;
+	width: 100%;
+	height: 100%;
+	align-items: center;
+	justify-content: center;
+	opacity: 0;
+	transition: all 0.2s ease-out;
+	backdrop-filter: blur(10px);
+
+	&.open
+	{
+		opacity: 1;
+		transform: scale(1);
+	}
+
+	.name, .score
+	{
+		flex-grow: 1;
+	}
+
+	.deaths, .score, .kills, .ping, .fps
+	{
+		width: 90px;
+		text-align: right;
+	}
+
+	.ping, .fps
+	{
+		width: 50px;
+		margin-right: 50px;
+	}
+
+	.deaths
+	{
+		margin-right: 50px;
+	}
+
+	.header
+	{
+		font-weight: bold;
+		color: #fc0;
+		border-bottom: 3px solid #fc0;
+		mix-blend-mode: lighten;
+		padding-bottom: 5px;
+		min-width: 40%;
+	}
+
+	.canvas
+	{
+		flex-direction: column;
+		min-height: 50%;
+		min-width: 40%;
+		mix-blend-mode: lighten;
+
+		.entry
+		{
+			mix-blend-mode: lighten;
+			color: white;
+
+			&.me
+			{
+				background-color: #ffc0cb94;
+			}
+		}
+	}
+}
