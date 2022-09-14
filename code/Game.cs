@@ -156,7 +156,7 @@ public partial class DemoDashGame : Sandbox.Game
 			postProcess.FilmGrain.Enabled = true;
 			postProcess.FilmGrain.Intensity = .5f;
 			postProcess.FilmGrain.Response = 0.5f;
-			postProcess.Saturate.Amount = 0;
+			postProcess.Saturate.Amount = 0.7f;
 		}
 	}
 }

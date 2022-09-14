@@ -50,7 +50,7 @@ public class InventoryBar : Panel
 	[Event("buildinput")]
 	public void ProcessClientInput( InputBuilder input )
 	{
-		if ( DemoDashGame.CurrentState != DemoDashGame.GameStates.Live ) return;
+		// if ( DemoDashGame.CurrentState != DemoDashGame.GameStates.Live ) return;
 
 		bool wantOpen = IsOpen;
 		var localPlayer = Local.Pawn as Player;

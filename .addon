@@ -21,7 +21,7 @@
   "RootNamespace": null,
   "Metadata": {
     "MaxPlayers": 32,
-    "MinPlayers": 2,
+    "MinPlayers": 1,
     "GameNetworkType": "Multiplayer",
     "MapSelect": "Tagged",
     "MapList": [
