@@ -34,4 +34,22 @@ public partial class DemoDashGame
 		var player = ConsoleSystem.Caller.Pawn as DemoDashPlayer;
 		player.GiveHealth( amount );
 	}
+
+	[ConCmd.Admin("dd_skip")]
+	public static void SkipStage()
+	{
+		if (Current is not DemoDashGame ddg)
+			return;
+
+		ddg.StateTimer = 1;
+	}
+
+	[ConCmd.Admin("dd_extend")]
+	public static void ExtendStage()
+	{
+		if (Current is not DemoDashGame ddg)
+			return;
+
+		ddg.StateTimer += 10 * 60;
+	}
 }

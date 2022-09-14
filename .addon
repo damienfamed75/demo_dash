@@ -10,7 +10,11 @@
     "/resource/*",
     "/resource/styles/*",
     "resource/templates/*",
-    "/particles/*"
+    "/particles/*",
+    "/models/*",
+    "/materials/*",
+    "/sounds/*",
+    "/ui/*"
   ],
   "HasCode": true,
   "CodePath": "/code/",
@@ -21,7 +25,7 @@
     "GameNetworkType": "Multiplayer",
     "MapSelect": "Unrestricted",
     "MapList": [
-      "dd_test"
+      "dd_factory"
     ],
     "RankType": "Increment",
     "PerMapRanking": false,

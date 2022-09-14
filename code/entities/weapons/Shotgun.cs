@@ -58,24 +58,6 @@ partial class Shotgun : DemoDashWeapon
 		ShootBullets( 4, 0.2f, 0.3f, 20.0f, 2.0f );
 	}
 
-    // public override void AttackSecondary()
-    // {
-	// 	TimeSincePrimaryAttack = -0.5f;
-	// 	TimeSinceSecondaryAttack = -0.5f;
-
-    //     if (!TakeAmmo(2)) {
-	// 		DryFire();
-	// 		return;
-	// 	}
-
-	// 	(Owner as AnimatedEntity).SetAnimParameter( "b_attack", true );
-
-    //     DoubleShootEffects();
-	// 	PlaySound( "rust_pumpshotgun.shootdouble" );
-
-	// 	ShootBullet( 8, 0.3f, 20.0f, 2.0f );
-	// }
-
     [ClientRpc]
 	protected override void ShootEffects()
 	{
@@ -86,18 +68,6 @@ partial class Shotgun : DemoDashWeapon
 
         if (ViewModelEntity != null) {
 			ViewModelEntity.SetAnimParameter( "fire", true );
-		}
-	}
-
-    [ClientRpc]
-	protected virtual void DoubleShootEffects()
-	{
-		Host.AssertClient();
-
-		Particles.Create( "particles/pistol_muzzleflash.vpcf", EffectEntity, "muzzle" );
-
-        if (ViewModelEntity != null) {
-			ViewModelEntity.SetAnimParameter( "fire_double", true );
 		}
 	}
 

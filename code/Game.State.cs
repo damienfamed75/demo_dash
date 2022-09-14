@@ -13,7 +13,7 @@ public partial class DemoDashGame
 	public GameStates GameState { get; set; } = GameStates.Warmup;
 
     [Net]
-	public string NextMap { get; set; } = "dd_test";
+	public string NextMap { get; set; } = "dd_factory";
 
 	public enum GameStates
 	{
@@ -23,18 +23,10 @@ public partial class DemoDashGame
 	    MapVote
 	}
 
-	[ConCmd.Admin("dd_skip")]
-	public static void SkipStage()
-	{
-		if (Current is not DemoDashGame ddg)
-			return;
-
-		ddg.StateTimer = 1;
-	}
-
 	private async Task GameLoopAsync()
 	{
 		while(!HasEnoughPlayers()) {
+			Log.Warning( $"only found {All.OfType<DemoDashPlayer>().Count()} players" );
 			GameState = GameStates.Warmup;
 			StateTimer = 10;
 			await WaitStateTimer();

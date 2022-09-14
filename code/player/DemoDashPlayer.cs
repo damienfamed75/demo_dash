@@ -1,5 +1,5 @@
-using System.Reflection.Metadata;
 using DemoDash.entities.weapons;
+using DemoDash.ui;
 using Sandbox;
 
 namespace DemoDash.player;
@@ -8,6 +8,7 @@ public partial class DemoDashPlayer : Player
 {
 	private TimeSince TimeSinceDropped;
 	private TimeSince TimeSinceDash;
+	private TimeSince TimeSinceJump;
 	private TimeSince TimeSinceSlide;
 
 	[Net, Predicted]
@@ -74,6 +75,10 @@ public partial class DemoDashPlayer : Player
         if (DemoDashGame.CurrentState == DemoDashGame.GameStates.GameEnd)
 			return;
 
+        if (Input.Pressed(InputButton.Jump) && Controller.GroundEntity != null) {
+			TimeSinceJump = 0;
+		}
+
 		base.Simulate( cl );
 
 		if (Input.ActiveChild != null) {
@@ -112,6 +117,10 @@ public partial class DemoDashPlayer : Player
 				CameraMode = new ThirdPersonCamera();
 			}
         }
+
+		if (Input.Pressed(InputButton.Flashlight)) {
+			DidDamage( true, true, 1200 );
+		}
 	}
 
 	public void RenderHud(Vector2 screenSize)
@@ -182,8 +191,8 @@ public partial class DemoDashPlayer : Player
 		lastDamage = info;
 
 		if (info.Attacker is DemoDashPlayer attacker) {
+			var score = 100;
 			if (Health <= 0) {
-				var score = 100;
 
 				score = (int)(score * (attacker.GroundEntity == null ? 1.5f : 1.0f));
 				score = (int)(score * (attacker.IsDashing && !attacker.IsSliding ? 2f : 1.0f));
@@ -193,13 +202,34 @@ public partial class DemoDashPlayer : Player
 				if (wasHeadshot)
 					score *= 2;
 
-				Log.Info( $"add [{score}] to [{info.Attacker.Name}]" );
-				// attacker.Client.AddInt( "score", score );
 				info.Attacker.Client.AddInt( "score", score );
 			}
+			attacker.DidDamage( wasHeadshot, Health <= 0, score );
 		}
 
 		// TookDamage( lastDamage.Flags, lastDamage.Position, lastDamage.Force );
+	}
+
+	[ClientRpc]
+	public void DidDamage(bool wasHeadshot, bool isDead, int score)
+	{
+		if (wasHeadshot) {
+			Sound.FromScreen( "dd.headshot" );
+		}
+		if (isDead) {
+			var scorePanel = new Score( score );
+			// Randomize whether to spawn number left or right of the player.
+			var offRot = Rand.Int( 0, 1 ) == 1 ? EyeRotation.Right : EyeRotation.Left;
+			// Random offset going downward.
+			var randDownOffset = Rand.Float( 0.0f, 20.0f );
+			// Set the position of the score panel.
+			scorePanel.Position = EyePosition + offRot * 32.0f + EyeRotation.Down * randDownOffset;
+			// Get the camera rotation and then flip around to be right way.
+			scorePanel.Rotation = CameraMode.Rotation * Rotation.FromYaw(180.0f);
+
+			float pitch = MathX.LerpInverse(score, 1200.0f, 0.0f, true);
+			Sound.FromScreen( "dd.score" ).SetPitch( 0.5f + pitch );
+		}
 	}
 
 	public override void StartTouch(Entity other)

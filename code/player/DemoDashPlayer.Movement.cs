@@ -20,7 +20,11 @@ public partial class DemoDashPlayer
 	[Net, Local]
 	public bool IsWallSliding { get; set; }
 
-    private void TickSpecialMovement()
+	readonly private float WallJumpPushForce = 650f;
+	readonly private float WallJumpUpForce = 500f;
+	readonly private float WallJumpCeilingTolerance = 0.1f;
+
+	private void TickSpecialMovement()
     {
 		// If the player is on the ground, after dashing, and is still holding down
 		// the dash button, then slide on the ground.
@@ -40,8 +44,9 @@ public partial class DemoDashPlayer
 		if (Input.Pressed(InputButton.SecondaryAttack) && !IsSliding && !IsDashing && TimeSinceDash > DashRechargeTime) {
 			StartDash();
 		}
+
         // If currently off the ground, check for the ability to wall jump.
-		if (GroundEntity == null) {
+		if (GroundEntity == null && TimeSinceJump.Relative > 0.25) {
 			TickWallJump();
 		}
     }
@@ -103,20 +108,23 @@ public partial class DemoDashPlayer
 
         // If the wall isn't nearly 90 degrees then it's not considered a
         // wall enough to walljump from.
-        if (wallJumpTrace.Normal.Angle(Vector3.Up) < 80.0f)
+        // Also if the walljump normal is almost straight down, then this is a ceiling
+        // and it shouldn't count for walljumping.
+        if (wallJumpTrace.Normal.Angle(Vector3.Up) < 80.0f
+            || wallJumpTrace.Normal.z.AlmostEqual(-1, WallJumpCeilingTolerance))
             return;
 
-        // DebugOverlay.TraceResult( wallJumpTrace );
+		// DebugOverlay.Line( Position + wallJumpCapsule.CenterA, Position + wallJumpCapsule.CenterB, Color.White, 0, false );
+		// DebugOverlay.TraceResult( wallJumpTrace );
+		// DebugOverlay.Sphere( Position + wallJumpCapsule.CenterA, wallJumpCapsule.Radius, Color.White, 0, false );
+		// DebugOverlay.Sphere( Position + wallJumpCapsule.CenterB, wallJumpCapsule.Radius, Color.White, 0, false );
 
-        // var jumpDir = EyeRotation.Forward;
-        // if ( Vector3.Dot( wallJumpTrace.Normal, jumpDir ) >= .3f ) // <= -.3f
-        // 	jumpDir = wallJumpTrace.Normal;
-
-        if (wallJumpTrace.Hit) {
+		if (wallJumpTrace.Hit) {
             // Wall sliding.
-            var WallJumpFriction = 3.0f;
+            var WallJumpFriction = 4.0f;
 
-            IsWallSliding = true;
+			// DebugOverlay.Text( $"on wall n[{wallJumpTrace.Normal}]", Position + Vector3.Up * 80 );
+			IsWallSliding = true;
 
             SetAnimParameter( "b_grounded", true );
             SetAnimParameter( "skid", 1.0f );
@@ -127,8 +135,8 @@ public partial class DemoDashPlayer
             // WallJump
             if (Input.Pressed(InputButton.Jump)) {
                 PlaySound( "dd.walljump" );
-                ApplyAbsoluteImpulse(wallJumpTrace.Normal.WithZ(0) * 500); // wall jump force
-                Velocity = Velocity.WithZ( 500 ); // jump force
+                ApplyAbsoluteImpulse(wallJumpTrace.Normal.WithZ(0) * WallJumpPushForce); // wall jump force
+                Velocity = Velocity.WithZ( WallJumpUpForce ); // jump force
             }
 
             // DebugOverlay.Line(
