@@ -19,6 +19,7 @@ public class RootHud : RootPanel
 
 		AddChild<Crosshair>();
 		AddChild<InventoryBar>();
+		AddChild<ChatBox>();
 		// AddChild<Ammo>();
 		// AddChild<Health>();
 		AddChild<KillFeed>();
