@@ -21,12 +21,14 @@
   "RootNamespace": null,
   "Metadata": {
     "MaxPlayers": 32,
-    "MinPlayers": 1,
+    "MinPlayers": 2,
     "GameNetworkType": "Multiplayer",
     "MapSelect": "Tagged",
-    "MapList": [],
+    "MapList": [
+      "gimlet.demodash_factory"
+    ],
     "RankType": "Increment",
-    "PerMapRanking": false,
+    "PerMapRanking": true,
     "LeaderboardType": "None",
     "ProjectTemplate": null,
     "GameCategory": "Fighting",
