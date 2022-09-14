@@ -24,6 +24,7 @@ public class RootHud : RootPanel
 		// AddChild<Health>();
 		AddChild<KillFeed>();
 		Scoreboard = AddChild<Scoreboard>();
+		AddChild<VoiceList>();
 	}
 
 	public override void Tick()
