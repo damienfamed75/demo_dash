@@ -13,7 +13,7 @@ public partial class DemoDashGame
 	public GameStates GameState { get; set; } = GameStates.Warmup;
 
     [Net]
-	public string NextMap { get; set; } = "";
+	public string NextMap { get; set; } = "dd_test";
 
 	public enum GameStates
 	{
@@ -23,7 +23,7 @@ public partial class DemoDashGame
 	    MapVote
 	}
 
-	[ConCmd.Admin]
+	[ConCmd.Admin("dd_skip")]
 	public static void SkipStage()
 	{
 		if (Current is not DemoDashGame ddg)
@@ -49,11 +49,13 @@ public partial class DemoDashGame
 		StateTimer = 10;
 		await WaitStateTimer();
 
-		GameState = GameStates.MapVote;
+		// GameState = GameStates.MapVote;
 		// var mapVote = new MapVoteEntity();
-		await WaitStateTimer();
+		// await WaitStateTimer();
 
 		// Global.ChangeLevel( mapVote.WinningMap );
+		// at the moment there's no maps to choose from so restart.
+		Global.ChangeLevel( NextMap );
 	}
 
 	/// <summary>
