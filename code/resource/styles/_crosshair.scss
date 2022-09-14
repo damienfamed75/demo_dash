@@ -11,6 +11,7 @@ crosshair
     border-radius: 100px;
     align-items: flex-end;
     opacity: 0.5;
+    transition: all 0.1s none;
 
     transform: translate(-50%, -50%);
 }

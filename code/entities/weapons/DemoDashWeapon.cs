@@ -38,7 +38,7 @@ partial class DemoDashWeapon : BaseWeapon, IUse
     {
 		base.Spawn();
 		// Set the base model to be the rust pistol.
-		SetModel( "weapons/rust_pistol/rust_pistol.vmdl" );
+		// SetModel( "weapons/rust_pistol/rust_pistol.vmdl" );
 		// Create a pickup trigger so a player can use this.
 		PickupTrigger = new PickupTrigger {
 			Parent = this,

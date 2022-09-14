@@ -11,6 +11,11 @@ class Crosshair : Panel
     public Crosshair()
     {
 		Current = this;
-		// StyleSheet.Load( "/ui/Crosshair.scss" );
+	}
+
+	public override void Tick()
+	{
+		// Move to where the crosshair is.
+		this.PositionAtCrosshair();
 	}
 }

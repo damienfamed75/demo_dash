@@ -61,6 +61,7 @@ public partial class DemoDashWeapon
 		//? How can I make the shooting more accurate in third person
 		// Cannot use player.CameraMode.Position or player.CameraMode.Rotation.Forward
 		// because the camera doesn't exist on the server end, only on the client.
+		// Owner.
 
 		ShootBullet( Owner.EyePosition, Owner.EyeRotation.Forward, spread, force, damage, bulletSize );
 	}
