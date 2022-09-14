@@ -60,7 +60,7 @@ public partial class DemoDashPlayer : Player
 		GiveAmmo( AmmoType.Pistol, 160 );
 
 		Animator = new StandardPlayerAnimator();
-		CameraMode = new FirstPersonCamera();
+		CameraMode = new ThirdPersonCamera();
 
 		Tags.Add( "player" );
 		Health = 100;
@@ -117,10 +117,6 @@ public partial class DemoDashPlayer : Player
 				CameraMode = new ThirdPersonCamera();
 			}
         }
-
-		if (Input.Pressed(InputButton.Flashlight)) {
-			DidDamage( true, true, 1200 );
-		}
 	}
 
 	public void RenderHud(Vector2 screenSize)
