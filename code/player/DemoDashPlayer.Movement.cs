@@ -8,16 +8,16 @@ public partial class DemoDashPlayer
     private Capsule wallJumpCapsule = Capsule.FromHeightAndRadius( 70, 24 );
 
 	// Initial velocity when a slide is initiated.
-    [Net, Local]
+    [Net, Local, Predicted]
 	public Vector3 SlideVelocity { get; set; }
 
-	[Net, Local]
+	[Net, Local, Predicted]
 	public bool IsDashing { get; set; }
 
-	[Net, Local]
+	[Net, Local, Predicted]
 	public bool IsSliding { get; set; }
 
-	[Net, Local]
+	[Net, Local, Predicted]
 	public bool IsWallSliding { get; set; }
 
 	readonly private float WallJumpPushForce = 650f;
