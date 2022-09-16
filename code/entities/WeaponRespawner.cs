@@ -18,9 +18,6 @@ public partial class WeaponRespawner : ModelEntity
 	[Net]
 	public RealTimeUntil TimeUntilRespawn { get; set; }
 
-	[Net]
-	public bool IsRespawning { get; set; }
-
 	private readonly float WeaponBob = 300f;
 	private readonly int WeaponRotSpeed = 1500;
 	private readonly float Offset = 30f;
@@ -28,20 +25,58 @@ public partial class WeaponRespawner : ModelEntity
 	public override void Spawn()
 	{
 		SetModel( "models/sbox_props/ceiling_light/ceiling_light.vmdl" );
-
-		Weapon = PickWeapon( Rand.Int( 0, 2 ) );
-		Weapon.Spawn();
-		Weapon.PhysicsEnabled = false;
-		Weapon.Position = Position + Vector3.Up * 20;
-
-		SpotLight = new SpotLightEntity();
-		SpotLight.Brightness = 0.5f;
-		SpotLight.EnableShadowCasting = false;
-		SpotLight.Rotation = Rotation.LookAt( Vector3.Up );
-		SpotLight.Position = Position + Vector3.Up * 5;
-		SpotLight.Color = (Color)Color.Parse( "#06c0fc" );
+		// Respawn a weapon here.
+		Respawn();
+		// Create the spotlight entity below the weapon.
+		SpotLight = new SpotLightEntity {
+			Position = Position + Vector3.Up * 3,
+			Rotation = Rotation.LookAt(Vector3.Up),
+			Brightness = 0.5f,
+			Color = (Color)Color.Parse("#06c0fc"),
+			EnableShadowCasting = false,
+		};
 	}
 
+	[Event.Tick.Server]
+	public async void OnTick()
+	{
+		if (Weapon == null)
+			return;
+
+		// If the weapon was just picked up by a player then re-enable physics
+		// on it and mark the weapon as gone.
+		if (Weapon.Owner != null) {
+			Weapon.PhysicsEnabled = true;
+			// Set the weapon to null so then if a player decides to drop the
+			// weapon before a new one is spawned, then it won't be teleported
+			// back above this entity.
+			Weapon = null;
+			await WaitForRespawn();
+		}
+		// Rotate the weapon around the yaw
+		Weapon.Rotation = Rotation.FromYaw( TimeSinceSpawn % 360f * Time.Delta * WeaponRotSpeed );
+		// Bob the weapon up and down.
+		var sTime = MathF.Sin( TimeSinceSpawn );
+		// RenderColor = (Color)Color.Parse( "#0066fb" );
+		Weapon.Position = Position.WithZ(Position.z + sTime * Time.Delta * WeaponBob ) + Vector3.Up * Offset;
+	}
+
+	/// <summary>
+	/// Waits to respawn a new weapon here.
+	/// </summary>
+	public async Task WaitForRespawn()
+	{
+		TimeUntilRespawn = 30 + Rand.Int( 10, 20 );
+		while(TimeUntilRespawn > 0) {
+			await Task.DelayRealtimeSeconds( 1.0f );
+		}
+
+		Respawn();
+	}
+
+	/// <summary>
+	/// Return a new weapon at the provided index.
+	/// </summary>
 	private static DemoDashWeapon PickWeapon(int i)
 	{
 		return i switch
@@ -53,44 +88,13 @@ public partial class WeaponRespawner : ModelEntity
 		};
 	}
 
-	[Event.Tick.Server]
-	public async void OnTick()
-	{
-		if (Weapon == null && !IsRespawning) {
-			await WaitForRespawn();
-		}
-		if (Weapon == null)
-			return;
-		// If the weapon was picked up by a player then re-enable physics.
-		if (Weapon.Owner != null) {
-			Weapon.PhysicsEnabled = true;
-			Weapon = null;
-			return;
-		}
-		// Rotate the weapon around the yaw
-		Weapon.Rotation = Rotation.FromYaw( TimeSinceSpawn % 360f * Time.Delta * WeaponRotSpeed );
-		// Bob the weapon up and down.
-		var sTime = MathF.Sin( TimeSinceSpawn );
-		// RenderColor = (Color)Color.Parse( "#0066fb" );
-		Weapon.Position = Position.WithZ(Position.z + sTime * Time.Delta * WeaponBob ) + Vector3.Up * Offset;
-	}
-
-	public async Task WaitForRespawn()
-	{
-		IsRespawning = true;
-		TimeUntilRespawn = 30 + Rand.Int( 10, 20 );
-		while(TimeUntilRespawn > 0) {
-			await Task.DelayRealtimeSeconds( 1.0f );
-		}
-
-		Respawn();
-	}
-
+	/// <summary>
+	/// Respawn a new weapon above this entity.
+	/// </summary>
 	public void Respawn()
 	{
 		Weapon = PickWeapon( Rand.Int( 0, 2 ) );
 		Weapon.PhysicsEnabled = false;
 		TimeSinceSpawn = 0;
-		IsRespawning = false;
 	}
 }
