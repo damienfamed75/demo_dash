@@ -1,3 +1,4 @@
+using DemoDash.entities.weapons;
 using DemoDash.player;
 
 namespace DemoDash;
@@ -83,5 +84,12 @@ public partial class DemoDashGame
 		}
 		// Respawn all the players.
 		All.OfType<DemoDashPlayer>().ToList().ForEach( x => x.Respawn() );
+		// Delete all weapons on the ground.
+		All.OfType<DemoDashWeapon>().ToList().ForEach( x => {
+			if (x.Owner == null)
+				x.Delete();
+		} );
+		// Respawn all weapons.
+		All.OfType<WeaponRespawner>().ToList().ForEach( x => x.Respawn() );
 	}
 }

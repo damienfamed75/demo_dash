@@ -52,12 +52,12 @@ public partial class DemoDashPlayer : Player
 
 		Clothing.DressEntity( this );
 
-		Inventory.Add( new Shotgun(), true );
-		Inventory.Add( new Pistol() );
-		Inventory.Add( new SMG() );
+		Inventory.Add( new Pistol(), true);
+		// Inventory.Add( new Shotgun(), true );
+		// Inventory.Add( new SMG() );
 
-		GiveAmmo( AmmoType.Shotgun, 99 );
-		GiveAmmo( AmmoType.Pistol, 160 );
+		// GiveAmmo( AmmoType.Shotgun, 99 );
+		GiveAmmo( AmmoType.Pistol, 60 );
 
 		Animator = new StandardPlayerAnimator();
 		CameraMode = new ThirdPersonCamera();
@@ -78,7 +78,7 @@ public partial class DemoDashPlayer : Player
 		if (Controller == null)
 			return;
 
-        if (Input.Pressed(InputButton.Jump) && Controller.GroundEntity != null) {
+		if (Input.Pressed(InputButton.Jump) && Controller.GroundEntity != null) {
 			TimeSinceJump = 0;
 		}
 
