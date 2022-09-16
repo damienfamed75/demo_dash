@@ -24,6 +24,8 @@ public partial class DemoDashPlayer
 	readonly private float WallJumpUpForce = 500f;
 	readonly private float WallJumpCeilingTolerance = 0.1f;
 
+	private Particles WallSlideParticles { get; set; }
+
 	private void TickSpecialMovement()
     {
 		// If the player is on the ground, after dashing, and is still holding down
@@ -125,6 +127,9 @@ public partial class DemoDashPlayer
 
 			// DebugOverlay.Text( $"on wall n[{wallJumpTrace.Normal}]", Position + Vector3.Up * 80 );
 			IsWallSliding = true;
+			if (Rand.Int(0, 2) == 1) {
+				WallSlideEffects();
+			}
 
             SetAnimParameter( "b_grounded", true );
             SetAnimParameter( "skid", 1.0f );
@@ -132,12 +137,12 @@ public partial class DemoDashPlayer
             Velocity *= new Vector3(1).WithZ( 1.0f - ( Time.Delta * WallJumpFriction ) );
             Rotation = Rotation.LookAt( wallJumpTrace.Normal * 10.0f, Vector3.Up );
 
-            // WallJump
-            if (Input.Pressed(InputButton.Jump)) {
+			// WallJump
+			if (Input.Pressed(InputButton.Jump)) {
                 PlaySound( "dd.walljump" );
                 ApplyAbsoluteImpulse(wallJumpTrace.Normal.WithZ(0) * WallJumpPushForce); // wall jump force
                 Velocity = Velocity.WithZ( WallJumpUpForce ); // jump force
-            }
+			}
 
             // DebugOverlay.Line(
             // 	Position+(Vector3.Up * 30),
@@ -146,4 +151,13 @@ public partial class DemoDashPlayer
             // );
         }
     }
+
+	[ClientRpc]
+	protected void WallSlideEffects()
+	{
+		// Assert that this is being called by a client.
+		Host.AssertClient();
+        // Create particles in front of the weapon (works for first & third person views)
+		Particles.Create( "particles/wallslide.vpcf", this, "ball_R", false );
+	}
 }
