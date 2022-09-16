@@ -159,4 +159,10 @@ public partial class DemoDashGame : Sandbox.Game
 			postProcess.Saturate.Amount = 0.7f;
 		}
 	}
+
+	public override void Shutdown()
+	{
+		All.OfType<WeaponRespawner>().ToList().ForEach( x => x.Delete() );
+		base.Shutdown();
+	}
 }
