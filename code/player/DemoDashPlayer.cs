@@ -75,6 +75,9 @@ public partial class DemoDashPlayer : Player
         if (DemoDashGame.CurrentState == DemoDashGame.GameStates.GameEnd)
 			return;
 
+		if (Controller == null)
+			return;
+
         if (Input.Pressed(InputButton.Jump) && Controller.GroundEntity != null) {
 			TimeSinceJump = 0;
 		}

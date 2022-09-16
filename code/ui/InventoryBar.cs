@@ -76,7 +76,6 @@ public class InventoryBar : Panel
 		{
 			SelectedWeapon = localPlayer?.ActiveChild as DemoDashWeapon;
 			IsOpen = true;
-			Log.Info( "open" );
 		}
 
 		// Not open fuck it off

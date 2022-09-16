@@ -39,7 +39,7 @@ public partial class DemoDashWeapon
 					.WithAttacker( Owner )
 					.WithWeapon( this );
 
-				Log.Info( $"ent[{tr.Entity.Name}] dmg[{damageInfo}]" );
+				// Log.Info( $"ent[{tr.Entity.Name}] dmg[{damageInfo}]" );
 				tr.Entity.TakeDamage( damageInfo );
 
 				// DebugOverlay.Sphere( tr.HitPosition, 12f, Color.White, 5f );
