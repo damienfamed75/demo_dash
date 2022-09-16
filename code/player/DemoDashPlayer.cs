@@ -56,8 +56,8 @@ public partial class DemoDashPlayer : Player
 		// Inventory.Add( new Shotgun(), true );
 		// Inventory.Add( new SMG() );
 
-		// GiveAmmo( AmmoType.Shotgun, 99 );
-		GiveAmmo( AmmoType.Pistol, 60 );
+		GiveAmmo( AmmoType.Shotgun, 99 );
+		GiveAmmo( AmmoType.Pistol, 120 );
 
 		Animator = new StandardPlayerAnimator();
 		CameraMode = new ThirdPersonCamera();
