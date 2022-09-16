@@ -49,6 +49,6 @@ partial class Pistol : DemoDashWeapon
 		ShootEffects();
 		PlaySound( "rust_pistol.shoot" );
 
-		ShootBullet( 0.05f, 1, 12.0f, 2.0f );
+		ShootBullet( 0.05f, 1, 20.0f, 2.0f );
 	}
 }

@@ -17,7 +17,7 @@ public partial class DemoDashPlayer : Player
 	private readonly float DashRechargeTime = 0.3f;
 	private readonly float WalkSpeed = 270;
 	private readonly float SprintSpeed = 100;
-	public readonly float MaxHealth = 100;
+	public readonly float MaxHealth = 50;
 
 	public ClothingContainer Clothing = new();
 
@@ -63,7 +63,7 @@ public partial class DemoDashPlayer : Player
 		CameraMode = new ThirdPersonCamera();
 
 		Tags.Add( "player" );
-		Health = 100;
+		Health = MaxHealth;
 
 		EndDash();
 
@@ -75,11 +75,10 @@ public partial class DemoDashPlayer : Player
         if (DemoDashGame.CurrentState == DemoDashGame.GameStates.GameEnd)
 			return;
 
-		if (Controller == null)
-			return;
-
-		if (Input.Pressed(InputButton.Jump) && Controller.GroundEntity != null) {
-			TimeSinceJump = 0;
+		if (LifeState == LifeState.Alive) {
+			if (Input.Pressed(InputButton.Jump) && Controller.GroundEntity != null) {
+				TimeSinceJump = 0;
+			}
 		}
 
 		base.Simulate( cl );
@@ -90,6 +89,7 @@ public partial class DemoDashPlayer : Player
 
 		if (LifeState != LifeState.Alive)
 			return;
+
 
 		TickPlayerUse();
 		SimulateActiveChild( cl, ActiveChild );
@@ -212,6 +212,9 @@ public partial class DemoDashPlayer : Player
 	[ClientRpc]
 	public void DidDamage(bool wasHeadshot, bool isDead, int score)
 	{
+		if (IsServer)
+			return;
+
 		if (wasHeadshot) {
 			Sound.FromScreen( "dd.headshot" );
 		}
