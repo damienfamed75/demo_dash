@@ -109,7 +109,7 @@ partial class Shotgun : DemoDashWeapon
 
 	public override void SimulateAnimator( PawnAnimator anim )
 	{
-		anim.SetAnimParameter( "holdtype", 3 );
+		anim.SetAnimParameter( "holdtype", (int)CitizenAnimationHelper.HoldTypes.Shotgun );
 		anim.SetAnimParameter( "aim_body_weight", 1.0f );
 	}
 }
