@@ -5,7 +5,10 @@ namespace DemoDash.player;
 
 public partial class DemoDashPlayer
 {
-    private Capsule wallJumpCapsule = Capsule.FromHeightAndRadius( 70, 24 );
+	[ConVar.Replicated("debug_movement")]
+	public static bool DebugMovement { get; set; }
+
+	private Capsule wallJumpCapsule = Capsule.FromHeightAndRadius( 70, 24 );
 
 	// Initial velocity when a slide is initiated.
     [Net, Local, Predicted]
@@ -18,7 +21,12 @@ public partial class DemoDashPlayer
 	public bool IsSliding { get; set; }
 
 	[Net, Local, Predicted]
-	public bool IsWallSliding { get; set; }
+	public bool IsOnWall { get; set; }
+
+	[Net, Local, Predicted]
+	public bool IsWallJumping { get; set; }
+
+	public Vector3 WallEntityNormal { get; set; }
 
 	readonly private float WallJumpPushForce = 650f;
 	readonly private float WallJumpUpForce = 500f;
@@ -38,7 +46,7 @@ public partial class DemoDashPlayer
 		// If sliding and the dash button is released then end dash.
 		if ((IsDashing && !IsSliding && Controller.GroundEntity != null)
 			|| (IsSliding && Input.Released(InputButton.SecondaryAttack))
-			|| (IsWallSliding && Controller.GroundEntity != null)) {
+			|| (IsWallJumping && Controller.GroundEntity != null)) {
 			EndDash();
 		}
 
@@ -47,11 +55,73 @@ public partial class DemoDashPlayer
 			StartDash();
 		}
 
+		// If diving through the air then rotate the pawn to match the sliding
+		// rotation.
+		if (GroundEntity == null && IsDashing) {
+			// I don't even know how the fuck this works so don't ask me.
+			float degrees = Velocity.z.LerpInverse(-300, 300) * -5;
+			// Loot at the normal and rotate the normal 90 degrees to match the
+			// current player rotation.
+			Rotation = Rotation.FromAxis( Velocity.Normal * Rotation.FromYaw(90f).Normal, degrees ) * Rotation;
+		}
+
         // If currently off the ground, check for the ability to wall jump.
 		if (GroundEntity == null && TimeSinceJump.Relative > 0.25) {
 			TickWallJump();
+		} else {
+			if (IsOnWall)
+				ResetWallJumpEffects();
+
+			IsOnWall = false;
+			IsWallJumping = false;
 		}
-    }
+
+		// if on wall, then detect wall jumps and set animation parameters.
+		if (IsOnWall) {
+			if (Rand.Int(0, 2) == 1) {
+				WallSlideEffects();
+			}
+
+            SetAnimParameter( "b_grounded", true );
+            SetAnimParameter( "skid", 1.0f );
+
+			var WallJumpFriction = 4.0f;
+            Velocity *= new Vector3(1).WithZ( 1.0f - ( Time.Delta * WallJumpFriction ) );
+            Rotation = Rotation.LookAt( WallEntityNormal * 10.0f, Vector3.Up );
+
+			// WallJump
+			if (Input.Pressed(InputButton.Jump)) {
+                PlaySound( "dd.walljump" );
+                ApplyAbsoluteImpulse(WallEntityNormal.WithZ(0) * WallJumpPushForce); // wall jump force
+                Velocity = Velocity.WithZ( WallJumpUpForce ); // jump force
+			}
+
+            // DebugOverlay.Line(
+            // 	Position+(Vector3.Up * 30),
+            // 	Position+(Vector3.Up * 30) + wallJumpTrace.Normal * 100,
+            // 	Color.Yellow, 0, false
+            // );
+
+			// Animator.AnimPawn.SetBoneTransform(15, )
+			// var t = GetBoneTransform( 15 );
+			// SetBoneTransform()
+			// SetBone( 15, t.WithPosition( wallJumpTrace.HitPosition ) );
+			// var t = GetBoneTransform( 13 );
+			// SetBone( 13, t.WithRotation( Rotation.LookAt( wallJumpTrace.HitPosition ) ) );
+			// var t = Animator.AnimPawn.GetBoneTransform( 13 );
+			// Animator.AnimPawn.SetBone( 13, t.WithRotation( Rotation.LookAt( wallJumpTrace.HitPosition ) ) );
+			// Animator.AnimPawn.ResetBone( 13 );
+		}
+
+		// Print out the debug movement.
+		if (DebugMovement) {
+			DebugOverlay.ScreenText( $" onwall[{IsOnWall}]"
+				+ $"\n walljumping[{IsWallJumping}]"
+				+ $"\n dashing[{IsDashing}]"
+				+ $"\n sliding[{IsSliding}]" 
+				+ $"\n  y[{(int)Rotation.Yaw()}]\n  r[{(int)Rotation.Roll()}]\n  p[{(int)Rotation.Pitch()}]");
+		}
+	}
 
 	public void StartDash()
 	{
@@ -79,7 +149,6 @@ public partial class DemoDashPlayer
 	{
 		IsDashing = false;
 		IsSliding = false;
-		IsWallSliding = false;
 		SlideVelocity = Vector3.Zero;
 		TimeSinceDash = 0;
 		SetAnimParameter( "skid", 0.0f );
@@ -116,41 +185,24 @@ public partial class DemoDashPlayer
             || wallJumpTrace.Normal.z.AlmostEqual(-1, WallJumpCeilingTolerance))
             return;
 
-		// DebugOverlay.Line( Position + wallJumpCapsule.CenterA, Position + wallJumpCapsule.CenterB, Color.White, 0, false );
-		// DebugOverlay.TraceResult( wallJumpTrace );
-		// DebugOverlay.Sphere( Position + wallJumpCapsule.CenterA, wallJumpCapsule.Radius, Color.White, 0, false );
-		// DebugOverlay.Sphere( Position + wallJumpCapsule.CenterB, wallJumpCapsule.Radius, Color.White, 0, false );
+		// If the player is currently on the wall and the walltrace didn't hit
+		// then the player should not be on the wall.
+		if (IsOnWall && !wallJumpTrace.Hit)
+			ResetWallJumpEffects();
 
-		if (wallJumpTrace.Hit) {
-            // Wall sliding.
-            var WallJumpFriction = 4.0f;
-
+		IsOnWall = wallJumpTrace.Hit;
+		if (IsOnWall) {
 			// DebugOverlay.Text( $"on wall n[{wallJumpTrace.Normal}]", Position + Vector3.Up * 80 );
-			IsWallSliding = true;
-			if (Rand.Int(0, 2) == 1) {
-				WallSlideEffects();
-			}
-
-            SetAnimParameter( "b_grounded", true );
-            SetAnimParameter( "skid", 1.0f );
-
-            Velocity *= new Vector3(1).WithZ( 1.0f - ( Time.Delta * WallJumpFriction ) );
-            Rotation = Rotation.LookAt( wallJumpTrace.Normal * 10.0f, Vector3.Up );
-
-			// WallJump
-			if (Input.Pressed(InputButton.Jump)) {
-                PlaySound( "dd.walljump" );
-                ApplyAbsoluteImpulse(wallJumpTrace.Normal.WithZ(0) * WallJumpPushForce); // wall jump force
-                Velocity = Velocity.WithZ( WallJumpUpForce ); // jump force
-			}
-
-            // DebugOverlay.Line(
-            // 	Position+(Vector3.Up * 30),
-            // 	Position+(Vector3.Up * 30) + wallJumpTrace.Normal * 100,
-            // 	Color.Yellow, 0, false
-            // );
-        }
+			IsWallJumping = true;
+			WallEntityNormal = wallJumpTrace.Normal;
+		}
     }
+
+	protected void ResetWallJumpEffects()
+	{
+		// ResetBones();
+		// ResetAnimParameters();
+	}
 
 	[ClientRpc]
 	protected void WallSlideEffects()

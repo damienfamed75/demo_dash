@@ -196,7 +196,8 @@ public partial class DemoDashPlayer : Player
 				score = (int)(score * (attacker.GroundEntity == null ? 1.5f : 1.0f));
 				score = (int)(score * (attacker.IsDashing && !attacker.IsSliding ? 2f : 1.0f));
 				score = (int)(score * (attacker.IsSliding ? 1.5f : 1.0f));
-				score = (int)(score * (attacker.IsWallSliding ? 3f : 1.0f));
+				score = (int)(score * (attacker.IsWallJumping ? 3f : 1.0f));
+				score = (int)(score * (attacker.IsOnWall ? 3f : 1.0f));
 
 				if (wasHeadshot)
 					score *= 2;

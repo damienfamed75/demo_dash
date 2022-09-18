@@ -35,6 +35,16 @@
     "DefaultLeaderboards": [],
     "ControlModes": {
       "Keyboard": true
+    },
+    "GameSettings": {
+      "debug_movement": {
+        "DisplayType": "Boolean",
+        "Choices": [],
+        "ConVarName": "debug_movement",
+        "DisplayName": "Debug Movement",
+        "DefaultValue": "false",
+        "Description": "Show the stats of the movement"
+      }
     }
   }
 }
