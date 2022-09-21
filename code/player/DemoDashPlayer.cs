@@ -7,14 +7,10 @@ namespace DemoDash.player;
 public partial class DemoDashPlayer : Player
 {
 	private TimeSince TimeSinceDropped;
-	private TimeSince TimeSinceDash;
-	private TimeSince TimeSinceJump;
-	private TimeSince TimeSinceSlide;
 
 	[Net, Predicted]
 	public TimeSince TimeSinceDamage { get; set; }
 
-	private readonly float DashRechargeTime = 0.3f;
 	private readonly float WalkSpeed = 270;
 	private readonly float SprintSpeed = 100;
 	public readonly float MaxHealth = 50;
@@ -78,12 +74,6 @@ public partial class DemoDashPlayer : Player
 	{
         if (DemoDashGame.CurrentState == DemoDashGame.GameStates.GameEnd)
 			return;
-
-		if (LifeState == LifeState.Alive) {
-			if (Input.Pressed(InputButton.Jump) && Controller.GroundEntity != null) {
-				TimeSinceJump = 0;
-			}
-		}
 
 		base.Simulate( cl );
 
@@ -226,11 +216,13 @@ public partial class DemoDashPlayer : Player
 			var score = 100;
 			if (Health <= 0) {
 
+				var atkctrl = attacker.Controller as DemoDashController;
+
 				score = (int)(score * (attacker.GroundEntity == null ? 1.5f : 1.0f));
-				score = (int)(score * (attacker.IsDashing && !attacker.IsSliding ? 2f : 1.0f));
-				score = (int)(score * (attacker.IsSliding ? 1.5f : 1.0f));
-				score = (int)(score * (attacker.IsWallJumping ? 3f : 1.0f));
-				score = (int)(score * (attacker.IsOnWall ? 3f : 1.0f));
+				score = (int)(score * (atkctrl.Dashing && !atkctrl.Sliding ? 2f : 1.0f));
+				score = (int)(score * (atkctrl.Sliding ? 1.5f : 1.0f));
+				score = (int)(score * (atkctrl.WallJumping ? 3f : 1.0f));
+				score = (int)(score * (atkctrl.OnWall ? 3f : 1.0f));
 
 				if (wasHeadshot)
 					score *= 2;

@@ -57,13 +57,11 @@ internal partial class DemoDashController : WalkController
 		if (PrevGrounded != Grounded) {
 			TimeSinceJump = 0;
 		}
-
 		// If the player is on the ground, after dashing, and is still holding down
 		// the dash button, then slide on the ground.
 		if (!Sliding && Dashing && Grounded && Input.Down(InputButton.SecondaryAttack)) {
 			StartSlide();
 		}
-
 		// If the player is currently sliding, then wane the velocity down
 		// and trigger the sliding event.
 		if (Sliding) {
@@ -71,7 +69,6 @@ internal partial class DemoDashController : WalkController
 			var jumpV = SlideVelocity * i;
 			Velocity = jumpV;
 		}
-
 		// If dashing and not sliding and the player is on the ground then end dash
 		// If sliding and the dash button is released then end dash.
 		if ((Dashing && !Sliding && Grounded)
@@ -82,7 +79,6 @@ internal partial class DemoDashController : WalkController
 
 			EndDash();
 		}
-
         // If dash button is pressed and not currently sliding or dashing
 		// and the dash has recharged then dash.
 		if (Input.Pressed(InputButton.SecondaryAttack)
@@ -90,7 +86,6 @@ internal partial class DemoDashController : WalkController
 
 			StartDash();
 		}
-
 		// If diving through the air then rotate the pawn to match the sliding
 		// rotation.
 		if (!Grounded && Dashing) {
@@ -100,7 +95,6 @@ internal partial class DemoDashController : WalkController
 			// current player rotation.
 			Rotation = Rotation.FromAxis( Velocity.Normal * Rotation.FromYaw(90f).Normal, degrees ) * Rotation;
 		}
-
     	// If currently off the ground, check for the ability to wall jump.
 		if (!Grounded && TimeSinceJump.Relative > 0.25) {
 			TickOnWall();
@@ -108,7 +102,6 @@ internal partial class DemoDashController : WalkController
 			OnWall = false;
 			WallJumping = false;
 		}
-
 		// if on a wall, then detect wall jumps.
 		if (OnWall) {
 			Velocity *= new Vector3( 1 ).WithZ( 1.0f - (Time.Delta * WallFriction) );
@@ -120,7 +113,6 @@ internal partial class DemoDashController : WalkController
 				AddEvent( "walljump" );
 			}
 		}
-
 		// Stopped being on the wall
 		if (OnWall != PrevOnWall) {
 			if (OnWall)
@@ -128,7 +120,6 @@ internal partial class DemoDashController : WalkController
 			else
 				AddEvent( "endonwall" );
 		}
-
 		// Readjust the player's rotation to be perpindicular to the ground.
 		var angles = Rotation.Angles();
 		angles.pitch = 0f;
