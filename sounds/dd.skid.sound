@@ -6,13 +6,11 @@
 		Volume = 1
 		VolumeRandom = 0
 		Pitch = 1
-		PitchRandom = 0.1
+		PitchRandom = 0
 		Decibels = 70
 		Sounds = 
 		[
-			resource:"sounds/cloth-rustle-8.vsnd",
-			resource:"sounds/cloth-rustle-7.vsnd",
-			resource:"sounds/cloth-rustle-6.vsnd",
+			resource:"sounds/skid-loop-02.vsnd",
 		]
 		SelectionMode = "Random"
 		MaximumDistance = 1143.9335

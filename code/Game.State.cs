@@ -14,7 +14,7 @@ public partial class DemoDashGame
 	public GameStates GameState { get; set; } = GameStates.Warmup;
 
     [Net]
-	public string NextMap { get; set; } = "dd_factory";
+	public string NextMap { get; set; } = "gimlet.demodash_factory";
 
 	public enum GameStates
 	{
