@@ -21,7 +21,7 @@ namespace DemoDash;
 /// </summary>
 public partial class DemoDashGame : Sandbox.Game
 {
-	readonly StandardPostProcess postProcess;
+	// readonly StandardPostProcess postProcess;
 
 	[Net]
 	DemoDashHud Hud { get; set; }
@@ -42,8 +42,8 @@ public partial class DemoDashGame : Sandbox.Game
 			_ = GameLoopAsync();
 		}
 		if (IsClient) {
-			postProcess = new StandardPostProcess();
-			PostProcess.Add( postProcess );
+			// postProcess = new StandardPostProcess();
+			// PostProcess.Add( postProcess );
 		}
 	}
 
@@ -95,9 +95,9 @@ public partial class DemoDashGame : Sandbox.Game
 		var screenSize = Screen.Size / scale;
 		var matrix = Matrix.CreateScale( scale );
 
-		using (Render.Draw2D.MatrixScope(matrix)) {
-			// localPawn.Render
-		}
+		// using (Render.Draw2D.MatrixScope(matrix)) {
+		// localPawn.Render
+		// }
 	}
 
 	[ClientRpc]
@@ -110,54 +110,58 @@ public partial class DemoDashGame : Sandbox.Game
 	{
 		base.FrameSimulate( cl );
 
-		postProcess.Blur.Enabled = false;
+		var hook = Map.Camera.FindOrCreateHook<DemoDashPostProcessEffect>();
 
-		postProcess.Saturate.Enabled = true;
-		postProcess.Saturate.Amount = 1f;
+		hook.Enabled = true;
 
-		postProcess.ChromaticAberration.Enabled = true;
-		postProcess.ChromaticAberration.Offset = 0.004f;
+		// postProcess.Blur.Enabled = false;
 
-		postProcess.FilmGrain.Enabled = false;
-		postProcess.FilmGrain.Intensity = 0f;
-		postProcess.FilmGrain.Response = 0f;
+		// postProcess.Saturate.Enabled = true;
+		// postProcess.Saturate.Amount = 1f;
 
-		if (Local.Pawn is DemoDashPlayer player) {
-			var timeSinceDamage = player.TimeSinceDamage.Relative / 2;
-			var damageUI = timeSinceDamage.LerpInverse( 0.5f, 0.0f, true ) * 0.2f;
+		// postProcess.ChromaticAberration.Enabled = true;
+		// postProcess.ChromaticAberration.Offset = 0.004f;
 
-			// If the player was recently damaged, then apply these effects.
-			if (damageUI > 0) {
-				postProcess.Saturate.Amount -= damageUI;
+		// postProcess.FilmGrain.Enabled = false;
+		// postProcess.FilmGrain.Intensity = 0f;
+		// postProcess.FilmGrain.Response = 0f;
 
-				postProcess.Blur.Enabled = true;
-				postProcess.Blur.Strength = damageUI * 0.5f;
+		// if (Local.Pawn is DemoDashPlayer player) {
+		// 	var timeSinceDamage = player.TimeSinceDamage.Relative / 2;
+		// 	var damageUI = timeSinceDamage.LerpInverse( 0.5f, 0.0f, true ) * 0.2f;
 
-				postProcess.ChromaticAberration.Enabled = true;
-				postProcess.ChromaticAberration.Offset += damageUI / 50;
-			}
+		// 	// If the player was recently damaged, then apply these effects.
+		// 	if (damageUI > 0) {
+		// 		postProcess.Saturate.Amount -= damageUI;
 
-			var lowHealthUI = player.Health.LerpInverse( 50.0f, 0.0f, true );
-			if (player.LifeState == LifeState.Dead)
-				lowHealthUI = 0;
+		// 		postProcess.Blur.Enabled = true;
+		// 		postProcess.Blur.Strength = damageUI * 0.5f;
 
-			// If the player is nearing death, then apply these effects.
-			if (lowHealthUI > 0) {
-				postProcess.Saturate.Amount -= lowHealthUI;
+		// 		postProcess.ChromaticAberration.Enabled = true;
+		// 		postProcess.ChromaticAberration.Offset += damageUI / 50;
+		// 	}
 
-				postProcess.Blur.Enabled = true;
-				postProcess.Blur.Strength = lowHealthUI * 0.10f;
+		// 	var lowHealthUI = player.Health.LerpInverse( 50.0f, 0.0f, true );
+		// 	if (player.LifeState == LifeState.Dead)
+		// 		lowHealthUI = 0;
 
-				Audio.SetEffect( "core.player.death.muffle1", lowHealthUI * 0.8f, 2.0f );
-			}
-		}
-		// If game state is a warmup, then grey the screen out and add filmgrain.
-		if (CurrentState == GameStates.Warmup) {
-			postProcess.FilmGrain.Enabled = true;
-			postProcess.FilmGrain.Intensity = .5f;
-			postProcess.FilmGrain.Response = 0.5f;
-			postProcess.Saturate.Amount = 0.7f;
-		}
+		// 	// If the player is nearing death, then apply these effects.
+		// 	if (lowHealthUI > 0) {
+		// 		postProcess.Saturate.Amount -= lowHealthUI;
+
+		// 		postProcess.Blur.Enabled = true;
+		// 		postProcess.Blur.Strength = lowHealthUI * 0.10f;
+
+		// 		Audio.SetEffect( "core.player.death.muffle1", lowHealthUI * 0.8f, 2.0f );
+		// 	}
+		// }
+		// // If game state is a warmup, then grey the screen out and add filmgrain.
+		// if (CurrentState == GameStates.Warmup) {
+		// 	postProcess.FilmGrain.Enabled = true;
+		// 	postProcess.FilmGrain.Intensity = .5f;
+		// 	postProcess.FilmGrain.Response = 0.5f;
+		// 	postProcess.Saturate.Amount = 0.7f;
+		// }
 	}
 
 	public override void Shutdown()
