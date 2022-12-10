@@ -1,4 +1,4 @@
-﻿global using SandboxEditor;
+﻿global using Editor;
 global using Sandbox;
 global using System;
 global using System.Collections.Generic;
@@ -19,7 +19,7 @@ namespace DemoDash;
 /// You can use this to create things like HUDs and declare which player class
 /// to use for spawned players.
 /// </summary>
-public partial class DemoDashGame : Sandbox.Game
+public partial class DemoDashGame : GameManager
 {
 	// readonly StandardPostProcess postProcess;
 
@@ -50,7 +50,7 @@ public partial class DemoDashGame : Sandbox.Game
 	/// <summary>
 	/// A client has joined the server. Make them a pawn to play with
 	/// </summary>
-	public override void ClientJoined( Client client )
+	public override void ClientJoined( IClient client )
 	{
 		base.ClientJoined( client );
 
@@ -78,7 +78,7 @@ public partial class DemoDashGame : Sandbox.Game
 		NumClients++;
 	}
 
-	public override void ClientDisconnect( Client cl, NetworkDisconnectionReason reason )
+	public override void ClientDisconnect( IClient cl, NetworkDisconnectionReason reason )
 	{
 		base.ClientDisconnect( cl, reason );
 		NumClients--;
@@ -87,7 +87,7 @@ public partial class DemoDashGame : Sandbox.Game
 	public override void RenderHud()
 	{
 		// base.RenderHud();
-		var localPawn = Local.Pawn as DemoDashPlayer;
+		var localPawn = Game.LocalPawn as DemoDashPlayer;
 		if (localPawn == null)
 			return;
 
@@ -106,13 +106,13 @@ public partial class DemoDashGame : Sandbox.Game
 		Sandbox.UI.KillFeed.Current?.AddEntry( leftid, left, rightid, right, method );
 	}
 
-	public override void FrameSimulate( Client cl )
+	public override void FrameSimulate( IClient cl )
 	{
 		base.FrameSimulate( cl );
 
-		var hook = Map.Camera.FindOrCreateHook<DemoDashPostProcessEffect>();
+		// var hook = Map.Camera.FindOrCreateHook<DemoDashPostProcessEffect>();
 
-		hook.Enabled = true;
+		// hook.Enabled = true;
 
 		// postProcess.Blur.Enabled = false;
 

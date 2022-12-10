@@ -1,3 +1,4 @@
+using DemoDash.player;
 using Sandbox;
 
 namespace DemoDash.entities.weapons;
@@ -56,14 +57,16 @@ public partial class DemoDashWeapon
 	/// <param name="bulletSize">the bullet size</param>
 	public virtual void ShootBullet( float spread, float force, float damage, float bulletSize )
 	{
-		Rand.SetSeed( Time.Tick );
+		// var rnd = new Random( Time.Tick );
 
 		//? How can I make the shooting more accurate in third person
 		// Cannot use player.CameraMode.Position or player.CameraMode.Rotation.Forward
 		// because the camera doesn't exist on the server end, only on the client.
 		// Owner.
 
-		ShootBullet( Owner.EyePosition, Owner.EyeRotation.Forward, spread, force, damage, bulletSize );
+		var pl = Owner as DemoDashPlayer; // Have to cast to player because Entity doesn't have eye position/rotation anymore.
+
+		ShootBullet( pl.EyePosition, pl.EyeRotation.Forward, spread, force, damage, bulletSize );
 	}
 
 	/// <summary>
@@ -77,8 +80,10 @@ public partial class DemoDashWeapon
 	/// <param name="bulletSize">the bullet size</param>
 	public virtual void ShootBullets( int numBullets, float spread, float force, float damage, float bulletSize )
 	{
-		var pos = Owner.EyePosition;
-		var dir = Owner.EyeRotation.Forward;
+		var pl = Owner as DemoDashPlayer; // Have to cast to player because Entity doesn't have eye position/rotation anymore.
+
+		var pos = pl.EyePosition;
+		var dir = pl.EyeRotation.Forward;
 
 		for ( int i = 0; i < numBullets; i++ )
 		{

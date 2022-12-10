@@ -5,7 +5,7 @@ namespace DemoDash.player;
 partial class DemoDashPlayer
 {
     [ClientRpc]
-    private void BecomeRagdollOnClient(Vector3 velocity, DamageFlags damageFlags, Vector3 forcePos, Vector3 force, int bone)
+    private void BecomeRagdollOnClient(Vector3 velocity, Vector3 forcePos, Vector3 force, int bone)
     {
 		var ent = new ModelEntity();
 

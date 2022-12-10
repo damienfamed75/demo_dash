@@ -28,7 +28,7 @@ partial class DemoDashWeapon {
 	/// </summary>
 	public override void CreateViewModel()
 	{
-		Host.AssertClient();
+		Game.AssertClient();
         // Check that the viewmodel path is not invalid.
         if (string.IsNullOrEmpty(ViewModelPath))
 			return;

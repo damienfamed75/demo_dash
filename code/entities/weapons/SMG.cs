@@ -1,4 +1,5 @@
 using DemoDash.player;
+using DemoDash.util;
 
 namespace DemoDash.entities.weapons;
 
@@ -49,7 +50,7 @@ partial class SMG : DemoDashWeapon
     [ClientRpc]
 	protected override void ShootEffects()
 	{
-		Host.AssertClient();
+		Game.AssertClient();
 
         Particles.Create( "particles/pistol_muzzleflash.vpcf", EffectEntity, "muzzle" );
 		Particles.Create( "particles/pistol_ejectbrass.vpcf", EffectEntity, "ejection_point" );
@@ -59,9 +60,11 @@ partial class SMG : DemoDashWeapon
 		}
 	}
 
-	public override void SimulateAnimator( PawnAnimator anim )
+	public override void SimulateAnimator( CitizenAnimationHelper anim )
 	{
-		anim.SetAnimParameter( "holdtype", (int)CitizenAnimationHelper.HoldTypes.Rifle );
-		anim.SetAnimParameter( "aim_body_weight", 1.0f );
+		anim.HoldType = CitizenAnimationHelper.HoldTypes.Rifle;
+		anim.AimBodyWeight = 1.0f;
+		// anim.SetAnimParameter( "holdtype", (int)CitizenAnimationHelper.HoldTypes.Rifle );
+		// anim.SetAnimParameter( "aim_body_weight", 1.0f );
 	}
 }

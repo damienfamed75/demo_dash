@@ -20,12 +20,12 @@ public partial class KillFeed : Panel
 		var entry = Current.AddChild<KillFeedEntry>();
 
 		entry.Left.Text = left;
-		entry.Left.SetClass( "me", lsteamid == (Local.Client?.PlayerId) );
+		entry.Left.SetClass( "me", lsteamid == Game.SteamId );
 
 		entry.Method.Text = method;
 
 		entry.Right.Text = right;
-		entry.Right.SetClass( "me", rsteamid == (Local.Client?.PlayerId) );
+		entry.Right.SetClass( "me", rsteamid == Game.SteamId );
 
 		return entry;
 	}

@@ -8,12 +8,12 @@ public partial class DemoDashHud : HudEntity<RootHud>
 	[ClientRpc]
 	public void OnPlayerDied(DemoDashPlayer player)
 	{
-		Host.AssertClient();
+		Game.AssertClient();
 	}
 
 	[ClientRpc]
 	public void ShowDeathScreen(string attackerName)
 	{
-		Host.AssertClient();
+		Game.AssertClient();
 	}
 }

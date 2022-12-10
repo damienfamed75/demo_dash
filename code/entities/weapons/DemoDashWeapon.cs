@@ -3,7 +3,7 @@ using DemoDash.player;
 
 namespace DemoDash.entities.weapons;
 
-partial class DemoDashWeapon : BaseWeapon, IUse
+partial class DemoDashWeapon : BasicWeapon, IUse
 {
     public virtual AmmoType AmmoType => AmmoType.Pistol;
 	public virtual int ClipSize => 16;
@@ -78,7 +78,7 @@ partial class DemoDashWeapon : BaseWeapon, IUse
 		}
     }
 
-	public override void Simulate( Client player )
+	public override void Simulate( IClient player )
 	{
 		if (TimeSinceDeployed < 0.6f)
 			return;
@@ -117,7 +117,7 @@ partial class DemoDashWeapon : BaseWeapon, IUse
     protected virtual void ShootEffects()
     {
         // Assert that this is being called by a client.
-		Host.AssertClient();
+		Game.AssertClient();
         // Create particles in front of the weapon (works for first & third person views)
 		Particles.Create( "particles/pistol_muzzleflash.vpcf", EffectEntity, "muzzle" );
         // Playback the fire animation on the weapon.

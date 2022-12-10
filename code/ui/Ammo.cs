@@ -15,7 +15,7 @@ public class Ammo : Panel
 
     public override void Tick()
     {
-		var player = Local.Pawn;
+		var player = Game.LocalPawn;
         if (player == null)
 			return;
 

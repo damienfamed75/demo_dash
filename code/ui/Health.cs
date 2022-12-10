@@ -31,7 +31,7 @@ public class Health : Panel
 
     public override void Tick()
     {
-		var player = Local.Pawn as DemoDashPlayer;
+		var player = Game.LocalPawn as DemoDashPlayer;
         if (player == null)
 			return;
 

@@ -37,7 +37,7 @@ public partial class DemoDashPlayer
     {
         // Convert the enum to an integer representing the index.
 		var iType = (int)type;
-		if (!Host.IsServer)
+		if (!Game.IsServer)
 			return false;
         if (Ammo == null)
 			return false;
@@ -62,7 +62,7 @@ public partial class DemoDashPlayer
 	/// <returns>amount of ammo added</returns>
     public int GiveAmmo(AmmoType type, int amount)
     {
-        if (!Host.IsServer)
+        if (!Game.IsServer)
 			return 0;
         if (Ammo == null)
 			return 0;

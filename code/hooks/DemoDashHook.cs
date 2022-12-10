@@ -9,7 +9,7 @@ public partial class DemoDashPostProcessEffect : RenderHook
 		// base.OnStage( target, renderStage );
 
 		// Don't render if local pawn is dead
-		if (Local.Pawn.Health <= 0)
+		if (Game.LocalPawn.Health <= 0)
 			return;
 
 		if (renderStage == Stage.BeforePostProcess) {

@@ -66,7 +66,8 @@ public partial class WeaponRespawner : ModelEntity
 	/// </summary>
 	public async Task WaitForRespawn()
 	{
-		TimeUntilRespawn = 30 + Rand.Int( 10, 20 );
+		var rnd = new Random();
+		TimeUntilRespawn = 30 + rnd.Int( 10, 20 );
 		while(TimeUntilRespawn > 0) {
 			await Task.DelayRealtimeSeconds( 1.0f );
 		}
@@ -93,7 +94,8 @@ public partial class WeaponRespawner : ModelEntity
 	/// </summary>
 	public void Respawn()
 	{
-		Weapon = PickWeapon( Rand.Int( 0, 2 ) );
+		var rnd = new Random();
+		Weapon = PickWeapon( rnd.Int( 0, 2 ) );
 		Weapon.PhysicsEnabled = false;
 		TimeSinceSpawn = 0;
 	}

@@ -1,10 +1,13 @@
+using DemoDash.player;
 using Sandbox;
 using System;
 using System.Linq;
+using System.Net;
+using DemoDash.util;
 
-partial class Inventory : BaseInventory
+partial class Inventory : DemoDash.util.BaseInventory
 {
-	public Inventory(Player player) : base(player)
+	public Inventory(DemoDashPlayer player) : base(player)
 	{
 	}
 
@@ -43,13 +46,13 @@ partial class Inventory : BaseInventory
 
 	public override bool Drop( Entity ent )
 	{
-		if ( !Host.IsServer )
+		if ( !Game.IsServer )
 			return false;
 		// If the player doesn't even contain this item in their inventory, return false.
 		if ( !Contains( ent ) )
 			return false;
 
-		if (ent is BaseCarriable bc) {
+		if (ent is DemoDash.util.BaseCarriable bc) {
 			bc.OnCarryDrop( Owner );
 		}
 

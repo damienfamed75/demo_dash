@@ -1,5 +1,7 @@
 
 // ViewModel is the model of an item. (first person)
+using DemoDash.player;
+
 public class ViewModel : BaseViewModel
 {
 	// variables that alter how much swing and bobbing there is on this item.
@@ -29,51 +31,52 @@ public class ViewModel : BaseViewModel
 	/// PostCameraSetup sets up the headbob and swinging of the viewmodel in your hands.
 	/// </summary>
 	/// <param name="camSetup">the built camera (see addons/base/code/Game.cs)</param>
-	public override void PostCameraSetup( ref CameraSetup camSetup )
-	{
-		base.PostCameraSetup( ref camSetup );
+	// public override void PostCameraSetup( ref CameraSetup camSetup )
+	// {
+	// 	base.PostCameraSetup( ref camSetup );
+		
 
-		// If the local pawn isn't valid then return.
-		if ( !Local.Pawn.IsValid() )
-			return;
+	// 	// If the local pawn isn't valid then return.
+	// 	if ( !Local.Pawn.IsValid() )
+	// 		return;
 
-		if ( !activated )
-		{
-			lastPitch = camSetup.Rotation.Pitch();
-			lastYaw = camSetup.Rotation.Yaw();
+	// 	if ( !activated )
+	// 	{
+	// 		lastPitch = camSetup.Rotation.Pitch();
+	// 		lastYaw = camSetup.Rotation.Yaw();
 
-			YawInertia = 0;
-			PitchInertia = 0;
+	// 		YawInertia = 0;
+	// 		PitchInertia = 0;
 
-			activated = true;
-		}
+	// 		activated = true;
+	// 	}
 
-		Position = camSetup.Position;
-		Rotation = camSetup.Rotation;
+	// 	Position = camSetup.Position;
+	// 	Rotation = camSetup.Rotation;
 
-		var cameraBoneIndex = GetBoneIndex( "camera" );
-		if ( cameraBoneIndex != -1 )
-		{
-			camSetup.Rotation *= Rotation.Inverse * GetBoneTransform( cameraBoneIndex ).Rotation;
-		}
+	// 	var cameraBoneIndex = GetBoneIndex( "camera" );
+	// 	if ( cameraBoneIndex != -1 )
+	// 	{
+	// 		camSetup.Rotation *= Rotation.Inverse * GetBoneTransform( cameraBoneIndex ).Rotation;
+	// 	}
 
-		var newPitch = Rotation.Pitch();
-		var newYaw = Rotation.Yaw();
+	// 	var newPitch = Rotation.Pitch();
+	// 	var newYaw = Rotation.Yaw();
 
-		PitchInertia = Angles.NormalizeAngle( newPitch - lastPitch );
-		YawInertia = Angles.NormalizeAngle( lastYaw - newYaw );
+	// 	PitchInertia = Angles.NormalizeAngle( newPitch - lastPitch );
+	// 	YawInertia = Angles.NormalizeAngle( lastYaw - newYaw );
 
-		// If headbob is enabled.
-		if (EnableSwingAndBob) {
-			SetSwingAndBob(newPitch);
-		} else {
-			SetAnimParameter( "aim_yaw_inertia", YawInertia );
-			SetAnimParameter( "aim_pitch_inertia", PitchInertia );
-		}
+	// 	// If headbob is enabled.
+	// 	if (EnableSwingAndBob) {
+	// 		SetSwingAndBob(newPitch);
+	// 	} else {
+	// 		SetAnimParameter( "aim_yaw_inertia", YawInertia );
+	// 		SetAnimParameter( "aim_pitch_inertia", PitchInertia );
+	// 	}
 
-		lastPitch = newPitch;
-		lastYaw = newYaw;
-	}
+	// 	lastPitch = newPitch;
+	// 	lastYaw = newYaw;
+	// }
 
 	/// <summary>
 	/// Based on the player's velocity and viewpoint pitch, set the viewmodel's
@@ -85,10 +88,10 @@ public class ViewModel : BaseViewModel
 	protected void SetSwingAndBob(float newPitch)
 	{
 		// Store the local client's pawn velocity.
-		var playerVelocity = Local.Pawn.Velocity;
+		var playerVelocity = Game.LocalPawn.Velocity;
 		// And if the local client's Pawn is a Player type.
 		// (which it should be all the time.)
-		if (Local.Pawn is Player player) {
+		if (Game.LocalPawn is DemoDashPlayer player) {
 			// Get the player controller.
 			var controller = player.GetActiveController();
 			// If the player is noclipping, then don't apply bobbing.
@@ -99,7 +102,7 @@ public class ViewModel : BaseViewModel
 
 		var verticalDelta = playerVelocity.z * Time.Delta;
 		var viewDown = Rotation.FromPitch( newPitch ).Up * -1.0f;
-		verticalDelta *= 1.0f - System.MathF.Abs( viewDown.Cross( Vector3.Down ).y );
+		verticalDelta *= 1.0f - MathF.Abs( viewDown.Cross( Vector3.Down ).y );
 		var pitchDelta = PitchInertia - verticalDelta * 1;
 		var yawDelta = YawInertia;
 

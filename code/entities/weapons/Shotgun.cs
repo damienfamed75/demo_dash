@@ -28,7 +28,7 @@ partial class Shotgun : DemoDashWeapon
 		AmmoClip = 6;
 	}
 
-    public override void Simulate(Client owner)
+    public override void Simulate(IClient owner)
     {
 		base.Simulate( owner );
 
@@ -61,7 +61,7 @@ partial class Shotgun : DemoDashWeapon
     [ClientRpc]
 	protected override void ShootEffects()
 	{
-		Host.AssertClient();
+		Game.AssertClient();
 
 		Particles.Create( "particles/pistol_muzzleflash.vpcf", EffectEntity, "muzzle" );
 		Particles.Create( "particles/pistol_ejectbrass.vpcf", EffectEntity, "ejection_point" );
@@ -107,9 +107,11 @@ partial class Shotgun : DemoDashWeapon
 		}
     }
 
-	public override void SimulateAnimator( PawnAnimator anim )
+	public override void SimulateAnimator( CitizenAnimationHelper anim )
 	{
-		anim.SetAnimParameter( "holdtype", (int)CitizenAnimationHelper.HoldTypes.Shotgun );
-		anim.SetAnimParameter( "aim_body_weight", 1.0f );
+		// anim.SetAnimParameter( "holdtype", (int)CitizenAnimationHelper.HoldTypes.Shotgun );
+		// anim.SetAnimParameter( "aim_body_weight", 1.0f );
+		anim.HoldType = CitizenAnimationHelper.HoldTypes.Shotgun;
+		anim.AimBodyWeight = 1.0f;
 	}
 }

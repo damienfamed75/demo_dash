@@ -48,7 +48,7 @@ public partial class DemoDashGame
 
 		// Global.ChangeLevel( mapVote.WinningMap );
 		// at the moment there's no maps to choose from so restart.
-		Global.ChangeLevel( NextMap );
+		Game.ChangeLevel( NextMap );
 	}
 
 	/// <summary>
@@ -77,7 +77,7 @@ public partial class DemoDashGame
 	private void FreshStart()
 	{
 		// Reset all the client's scores.
-		foreach (var cli in Client.All) {
+		foreach (var cli in All.OfType<IClient>()) {
 			cli.SetInt( "kills", 0 );
 			cli.SetInt( "deaths", 0 );
 			cli.SetInt( "score", 0 );

@@ -17,7 +17,7 @@ internal class GameHud : Panel
 	{
 		base.Tick();
 
-		var game = Game.Current as DemoDashGame;
+		var game = GameManager.Current as DemoDashGame;
 		if (!game.IsValid())
 			return;
 

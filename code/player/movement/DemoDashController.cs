@@ -1,8 +1,4 @@
-using System.Numerics;
-using System.Runtime.Intrinsics.X86;
-using Sandbox;
-
-internal partial class DemoDashController : WalkController
+internal partial class DemoDashController : WalkingController
 {
 	[ConVar.Replicated("debug_movement")]
 	public static bool DebugMovement { get; set; }

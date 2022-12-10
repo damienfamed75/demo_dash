@@ -1,13 +1,15 @@
+using DemoDash.player;
+
 namespace Sandbox.UI
 {
 	public static class PanelExtension
 	{
 		public static void PositionAtCrosshair( this Panel panel )
 		{
-			panel.PositionAtCrosshair( Local.Pawn as Player );
+			panel.PositionAtCrosshair( Game.LocalPawn as DemoDashPlayer );
 		}
 
-		public static void PositionAtCrosshair( this Panel panel, Player player )
+		public static void PositionAtCrosshair( this Panel panel, DemoDashPlayer player )
 		{
 			if ( !player.IsValid() ) return;
 
