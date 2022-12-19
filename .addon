@@ -3,7 +3,7 @@
   "Type": "game",
   "Org": "gimlet",
   "Ident": "demo_dash",
-  "Tags": null,
+  "Tags": "",
   "Schema": 1,
   "HasAssets": true,
   "AssetsPath": "",
@@ -45,6 +45,9 @@
         "DefaultValue": "false",
         "Description": "Show the stats of the movement"
       }
-    }
+    },
+    "Summary": "A fast paced parkour oriented arena shooter where style wins you games",
+    "Description": "Jump, Dash, Dive, Slide, and Wall Jump!\nGain as much score as possible by performing these actions when defeating your opponents\n\nGame is WIP but mostly works\nLet me know what you think or if you find any bugs/issues with the game.\nI\u0027m on the s\u0026box server: Damien#0812\n\nControls:\nDive/Dash: Right Click\nSlide: Hold Right Click after diving/dashing\nScoreboard: Tab",
+    "Public": true
   }
 }

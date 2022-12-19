@@ -29,7 +29,7 @@ public partial class DemoDashWeapon
 			if (tr.Distance > 200)
 				CreateTracerEffect( tr.EndPosition );
 
-			if ( !tr.Entity.IsValid() || !IsServer )
+			if ( !tr.Entity.IsValid() || !Game.IsServer )
 				continue;
 
 			// Turn prediction off so any exploding effects don't get culled.

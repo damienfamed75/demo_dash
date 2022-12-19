@@ -249,7 +249,7 @@ public partial class DemoDashPlayer : DemoDash.util.BasePlayer
 	[ClientRpc]
 	public void DidDamage(bool wasHeadshot, bool isDead, int score)
 	{
-		if (IsServer)
+		if (Game.IsServer)
 			return;
 
 		if (wasHeadshot) {

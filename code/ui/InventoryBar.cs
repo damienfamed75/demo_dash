@@ -30,7 +30,7 @@ public class InventoryBar : Panel
 
 		SetClass( "active", IsOpen );
 
-		var player = Game.LocalPawn as Player;
+		var player = Game.LocalPawn as DemoDashPlayer;
 		if ( player == null ) return;
 
 		Weapons.Clear();
@@ -48,7 +48,9 @@ public class InventoryBar : Panel
 	/// </summary>
 	// [Event.BuildInput]
 
-	[Event("buildinput")]
+	// [Event("buildinput")]
+
+	[Event.Client.BuildInput]
 	public void ProcessClientInput()
 	{
 		// if ( DemoDashGame.CurrentState != DemoDashGame.GameStates.Live ) return;
@@ -68,6 +70,7 @@ public class InventoryBar : Panel
 
 		if ( Weapons.Count == 0 )
 		{
+			Log.Info( "no weapons" );
 			IsOpen = false;
 			return;
 		}
@@ -90,7 +93,9 @@ public class InventoryBar : Panel
 			Input.SuppressButton( InputButton.PrimaryAttack );
 			// input.ActiveChild = SelectedWeapon;
 			//! TODO this line doesn't work.
-			(Game.LocalPawn as DemoDashPlayer).ActiveChild = SelectedWeapon;
+
+			(Game.LocalPawn as DemoDashPlayer).ActiveChildInput = SelectedWeapon;
+			// (Game.LocalPawn as DemoDashPlayer).ActiveChild = SelectedWeapon;
 			IsOpen = false;
 			Sound.FromScreen( "ui.button.press" );
 			return;

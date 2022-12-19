@@ -36,12 +36,12 @@ public partial class DemoDashGame : GameManager
 
 	public DemoDashGame()
 	{
-		if (IsServer) {
+		if (Game.IsServer) {
 			Hud = new DemoDashHud();
 
 			_ = GameLoopAsync();
 		}
-		if (IsClient) {
+		if (Game.IsClient) {
 			// postProcess = new StandardPostProcess();
 			// PostProcess.Add( postProcess );
 		}

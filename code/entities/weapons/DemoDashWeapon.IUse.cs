@@ -10,8 +10,8 @@ partial class DemoDashWeapon
 	/// </summary>
     public bool OnUse(Entity user)
     {
-        // If this weapon is already owned by someone then it's unusable.
-        if (Owner != null)
+		// If this weapon is already owned by someone then it's unusable.
+		if (Owner != null)
 			return false;
         // If the user is invalid then do nothing.
         if (!user.IsValid())
@@ -24,7 +24,7 @@ partial class DemoDashWeapon
 
     public bool IsUsable(Entity user)
     {
-        var player = user as Player;
+        var player = user as DemoDashPlayer;
 
         if (Owner != null)
 			return false;
